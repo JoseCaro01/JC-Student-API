@@ -111,7 +111,13 @@ Authorization: Bearer <token>
 - `GET /api/students` → List all students  
 - `GET /api/students/{id}` → Get student by ID  
 - `PUT /api/students/{id}` → Update student  
-- `DELETE /api/students/{id}` → Delete student  
+- `DELETE /api/students/{id}` → Delete student
+- `POST /students/{studentId}/assignments/{assignmentId}/evaluate` → Evaluate a student's assignment
+- `POST /students/{studentId}/projects/{projectId}/evaluate` → Evaluate a student's project
+- `GET /students/{studentId}/score-pdf` → Generate a PDF of a student's assignment scores
+- `GET /students/{studentId}/project-score-pdf` → Generate a PDF of a student's project scores
+- `POST /students/{studentId}/send-score-pdf` → Send a student's assignment score PDF via email
+- `POST /students/{studentId}/project-send-score-pdf` → Send a student's project score PDF via email
 
 #### 📚 Courses
 - `POST /api/courses` → Create course  
