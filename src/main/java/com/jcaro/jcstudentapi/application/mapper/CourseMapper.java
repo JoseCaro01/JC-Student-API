@@ -28,10 +28,7 @@ public class CourseMapper {
         return new Course(
                 null,
                 dto.name(),
-                dto.programmingLanguage(),
-                Collections.emptyList(),
-                Collections.emptyList(),
-                Collections.emptyList()
+                dto.programmingLanguage()
         );
     }
 }

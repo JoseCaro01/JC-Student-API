@@ -27,7 +27,7 @@ public class AssignmentEntity {
     @ManyToOne
     private CourseEntity course;
     @OneToMany(mappedBy = "assignment",cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<StudentAssignmentEntity> studentAssignmentList;
+
 
 }

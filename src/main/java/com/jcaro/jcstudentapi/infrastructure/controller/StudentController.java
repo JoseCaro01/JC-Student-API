@@ -6,13 +6,15 @@ import com.jcaro.jcstudentapi.application.usecase.student.*;
 import com.jcaro.jcstudentapi.domain.model.ScoreEnum;
 import com.jcaro.jcstudentapi.domain.model.Student;
 import jakarta.validation.Valid;
-import org.springframework.data.repository.query.Param;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing students.
@@ -32,6 +34,11 @@ public class StudentController {
     private final RemoveStudentUseCase removeStudentUseCase;
     private final EvaluateAssignmentUseCase evaluateAssignmentUseCase;
     private final EvaluateProjectUseCase evaluateProjectUseCase;
+    private final GenerateStudentScorePDFUseCase generateStudentScorePDFUseCase;
+    private final SendStudentScoreEmailUseCase sendStudentScoreEmailUseCase;
+    private final GenerateStudentProjectScorePDFUseCase generateStudentProjectScorePDFUseCase;
+    private final SendStudentProjectScoreEmailUseCase sendStudentProjectScoreEmailUseCase;
+
 
     public StudentController(CreateStudentUseCase createStudentUseCase,
                              EditStudentUseCase editStudentUseCase,
@@ -39,7 +46,7 @@ public class StudentController {
                              GetStudentsUseCase getStudentsUseCase,
                              RemoveStudentUseCase removeStudentUseCase,
                              EvaluateAssignmentUseCase evaluateAssignmentUseCase,
-                             EvaluateProjectUseCase evaluateProjectUseCase) {
+                             EvaluateProjectUseCase evaluateProjectUseCase, GenerateStudentScorePDFUseCase generateStudentScorePDFUseCase, SendStudentScoreEmailUseCase sendStudentScoreEmailUseCase,GenerateStudentProjectScorePDFUseCase generateStudentProjectScorePDFUseCase,SendStudentProjectScoreEmailUseCase sendStudentProjectScoreEmailUseCase) {
         this.createStudentUseCase = createStudentUseCase;
         this.editStudentUseCase = editStudentUseCase;
         this.getStudentByIdUseCase = getStudentByIdUseCase;
@@ -47,6 +54,10 @@ public class StudentController {
         this.removeStudentUseCase = removeStudentUseCase;
         this.evaluateAssignmentUseCase = evaluateAssignmentUseCase;
         this.evaluateProjectUseCase = evaluateProjectUseCase;
+        this.generateStudentScorePDFUseCase = generateStudentScorePDFUseCase;
+        this.sendStudentScoreEmailUseCase = sendStudentScoreEmailUseCase;
+        this.generateStudentProjectScorePDFUseCase = generateStudentProjectScorePDFUseCase;
+        this.sendStudentProjectScoreEmailUseCase=sendStudentProjectScoreEmailUseCase;
     }
 
     // --- CRUD Endpoints ---
@@ -92,7 +103,7 @@ public class StudentController {
      * @return a list of {@link Student}
      */
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents(@Param("courseId") Optional<Long> courseId) {
+    public ResponseEntity<List<Student>> getAllStudents(@RequestParam(name = "courseId", required = false) Long courseId) {
         return new ResponseEntity<>(getStudentsUseCase.execute(courseId), HttpStatus.OK);
     }
 
@@ -113,7 +124,7 @@ public class StudentController {
     /**
      * Evaluates a student's assignment by assigning a score.
      *
-     * @param studentId   the ID of the student being evaluated
+     * @param studentId    the ID of the student being evaluated
      * @param assignmentId the ID of the assignment
      * @param score        the score assigned to the student for the assignment
      * @return {@link HttpStatus#OK} if evaluation was successful
@@ -122,7 +133,7 @@ public class StudentController {
     public ResponseEntity<Void> evaluateAssignment(
             @PathVariable Long studentId,
             @PathVariable Long assignmentId,
-            @RequestParam ScoreEnum score
+            @RequestParam String score
     ) {
         evaluateAssignmentUseCase.execute(studentId, assignmentId, score);
         return ResponseEntity.ok().build();
@@ -131,8 +142,8 @@ public class StudentController {
     /**
      * Evaluates a student's project using multiple scoring categories.
      *
-     * @param studentId                    the ID of the student being evaluated
-     * @param projectId                    the ID of the project
+     * @param studentId                     the ID of the student being evaluated
+     * @param projectId                     the ID of the project
      * @param studentEvaluateProjectRequest the request payload containing project evaluation details
      * @return {@link HttpStatus#OK} if evaluation was successful
      */
@@ -144,5 +155,83 @@ public class StudentController {
     ) {
         evaluateProjectUseCase.execute(studentId, projectId, studentEvaluateProjectRequest);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Generate a PDF with the student's scores.
+     *
+     * @param studentId ID of the student
+     * @param courseId  optional course filter
+     * @return PDF file as ResponseEntity
+     */
+    @GetMapping("/{studentId}/score-pdf")
+    public ResponseEntity<InputStreamResource> generateStudentScorePdf(
+            @PathVariable Long studentId,
+            @RequestParam(name = "courseId", required = false) Long courseId) {
+
+        final ByteArrayInputStream pdf = generateStudentScorePDFUseCase.execute(studentId, courseId);
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=student-" + studentId + "-score.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(pdf));
+    }
+
+    /**
+     * Generate a PDF with the student's Project scores.
+     *
+     * @param studentId ID of the student
+     * @param courseId  optional course filter
+     * @return PDF file as ResponseEntity
+     */
+    @GetMapping("/{studentId}/project-score-pdf")
+    public ResponseEntity<InputStreamResource> generateStudentProjectScorePdf(
+            @PathVariable Long studentId,
+            @RequestParam(name = "courseId", required = false) Long courseId) {
+
+        final ByteArrayInputStream pdf = generateStudentProjectScorePDFUseCase.execute(studentId, courseId);
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=student-" + studentId + "-score.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(pdf));
+    }
+
+    /**
+     * Sends a student's score PDF to their email.
+     *
+     * @param studentId ID of the student
+     * @param courseId  optional course filter
+     */
+    @PostMapping("/{studentId}/send-score-pdf")
+    public ResponseEntity<Void> sendStudentScorePdfByEmail(
+            @PathVariable Long studentId,
+            @RequestParam(name = "courseId", required = false) Long courseId) {
+
+        sendStudentScoreEmailUseCase.execute(studentId, courseId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Sends a student's project score PDF to their email.
+     *
+     * @param studentId ID of the student
+     * @param courseId  optional course filter
+     */
+    @PostMapping("/{studentId}/project-send-score-pdf")
+    public ResponseEntity<Void> sendStudentProjectScorePdfByEmail(
+            @PathVariable Long studentId,
+            @RequestParam(name = "courseId", required = false) Long courseId) {
+
+        sendStudentProjectScoreEmailUseCase.execute(studentId, courseId);
+
+        return ResponseEntity.noContent().build();
     }
 }

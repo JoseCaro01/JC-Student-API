@@ -23,9 +23,10 @@ public class GetAllAssignmentsUseCase {
      * @param courseId optional filter by courseId
      * @return list of assignments
      */
-    public List<Assignment> execute(Optional<Long> courseId) {
-        return courseId.isPresent()
-                ? assignmentRepository.findByCourseId(courseId.get())
+    public List<Assignment> execute(Long courseId) {
+
+        return courseId !=null
+                ? assignmentRepository.findByCourseId(courseId)
                 : assignmentRepository.findAll();
     }
 }

@@ -21,10 +21,9 @@ public class ProjectEntity {
     private Long id;
     private String name;
     private String description;
-    @ManyToOne
+    @OneToOne
     private CourseEntity course;
     @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<StudentProjectEntity> studentProjects;
 
 }

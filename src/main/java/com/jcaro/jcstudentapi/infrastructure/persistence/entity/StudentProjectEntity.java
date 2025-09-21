@@ -15,7 +15,6 @@ public class StudentProjectEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JsonIgnore
     private StudentEntity student;
     @ManyToOne
     private ProjectEntity project;

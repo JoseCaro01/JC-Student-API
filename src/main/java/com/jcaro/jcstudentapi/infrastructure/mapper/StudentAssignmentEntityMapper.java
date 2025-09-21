@@ -15,6 +15,21 @@ import java.util.stream.Collectors;
 @Component
 public class StudentAssignmentEntityMapper {
 
+
+    private final StudentEntityMapper studentEntityMapper;
+    private final AssignmentEntityMapper assignmentEntityMapper;
+
+    /**
+     * Constructor that injects CourseEntityMapper to map
+     * Course objects within Assignment.
+     *
+     * @param studentEntityMapper mapper to convert CourseEntity to Course
+     * @param assignmentEntityMapper mapper to convert CourseEntity to Course
+     */
+    public StudentAssignmentEntityMapper(StudentEntityMapper studentEntityMapper, AssignmentEntityMapper assignmentEntityMapper) {
+        this.studentEntityMapper = studentEntityMapper;
+        this.assignmentEntityMapper = assignmentEntityMapper;
+    }
     /**
      * Converts a StudentAssignmentEntity to a StudentAssignment domain model.
      * @param entity the StudentAssignmentEntity to convert
@@ -28,8 +43,8 @@ public class StudentAssignmentEntityMapper {
 
         return new StudentAssignment(
                 entity.getId(),
-                null, // Avoid for cyclic dependency
-                null, // Avoid for cyclic dependency
+               studentEntityMapper.toDomain(entity.getStudent()),
+                assignmentEntityMapper.toDomain(entity.getAssignment()),
                 entity.getScore()
         );
     }
@@ -46,9 +61,10 @@ public class StudentAssignmentEntityMapper {
 
         StudentAssignmentEntity entity = new StudentAssignmentEntity();
         entity.setId(domain.id());
+        entity.setStudent(studentEntityMapper.toEntity(domain.student()));
+        entity.setAssignment(assignmentEntityMapper.toEntity(domain.assignment()));
         entity.setScore(domain.score());
 
-        // Student y Assignment se deberían mapear con mappers específicos
         return entity;
     }
 

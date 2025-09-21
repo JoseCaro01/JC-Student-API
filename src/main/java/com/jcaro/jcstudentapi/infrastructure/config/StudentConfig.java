@@ -3,6 +3,9 @@ package com.jcaro.jcstudentapi.infrastructure.config;
 
 import com.jcaro.jcstudentapi.application.mapper.AssignmentMapper;
 import com.jcaro.jcstudentapi.application.mapper.StudentMapper;
+import com.jcaro.jcstudentapi.application.service.AssignmentPdfGeneratorService;
+import com.jcaro.jcstudentapi.application.service.EmailService;
+import com.jcaro.jcstudentapi.application.service.ProjectPdfGeneratorService;
 import com.jcaro.jcstudentapi.application.usecase.student.*;
 import com.jcaro.jcstudentapi.application.usecase.user.CreateUserUseCase;
 import com.jcaro.jcstudentapi.domain.repository.*;
@@ -52,5 +55,29 @@ public class StudentConfig {
     public RemoveStudentUseCase removeStudentUseCase(StudentRepository studentRepository) {
         return new RemoveStudentUseCase(studentRepository);
     }
+
+    @Bean
+    public GenerateStudentScorePDFUseCase generateStudentScorePDFUseCase(StudentRepository studentRepository, AssignmentRepository assignmentRepository,StudentAssignmentRepository studentAssignmentRepository, AssignmentPdfGeneratorService assignmentPdfGeneratorService) {
+        return new GenerateStudentScorePDFUseCase(studentRepository,assignmentRepository,studentAssignmentRepository,assignmentPdfGeneratorService);
+    }
+
+    @Bean
+    public SendStudentScoreEmailUseCase sendStudentScoreEmailUseCase(StudentRepository studentRepository, AssignmentRepository assignmentRepository,StudentAssignmentRepository studentAssignmentRepository, EmailService emailService, AssignmentPdfGeneratorService assignmentPdfGeneratorService) {
+        return new SendStudentScoreEmailUseCase(studentRepository,assignmentRepository,studentAssignmentRepository,emailService,assignmentPdfGeneratorService);
+    }
+
+
+    @Bean
+    public GenerateStudentProjectScorePDFUseCase generateStudentProjectScorePDFUseCase(StudentRepository studentRepository,StudentProjectRepository studentProjectRepository, ProjectPdfGeneratorService projectPdfGeneratorService) {
+        return new GenerateStudentProjectScorePDFUseCase(studentRepository,studentProjectRepository,projectPdfGeneratorService);
+    }
+
+    @Bean
+    public SendStudentProjectScoreEmailUseCase sendStudentProjectScoreEmailUseCase(StudentRepository studentRepository, StudentProjectRepository studentProjectRepository, EmailService emailService, ProjectPdfGeneratorService projectPdfGeneratorService) {
+        return new SendStudentProjectScoreEmailUseCase(studentRepository,studentProjectRepository,emailService,projectPdfGeneratorService);
+    }
+
+
+
 
 }

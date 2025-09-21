@@ -55,6 +55,13 @@ public class StudentProjectAdapter implements StudentProjectRepository {
     }
 
     @Override
+    public List<StudentProject> findByStudentIdAndCourseId(Long studentId, Long courseId) {
+        return studentProjectJpaRepository.findByStudentIdAndProjectCourseId(studentId, courseId).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteById(Long id) {
         studentProjectJpaRepository.deleteById(id);
     }

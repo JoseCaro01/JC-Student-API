@@ -28,8 +28,8 @@ public class CourseEntityMapper {
         return new Course(
                 entity.getId(),
                 entity.getName(),
-                entity.getProgrammingLanguage(),
-                Collections.emptyList(), Collections.emptyList(), Collections.emptyList()
+                entity.getProgrammingLanguage()
+
         );
     }
 
@@ -48,9 +48,6 @@ public class CourseEntityMapper {
         entity.setId(domain.id());
         entity.setName(domain.name());
         entity.setProgrammingLanguage(domain.programmingLanguage());
-        entity.setAssignmentList(Collections.emptyList());
-        entity.setStudentList(Collections.emptyList());
-        entity.setProjectList(Collections.emptyList());
 
         return entity;
     }

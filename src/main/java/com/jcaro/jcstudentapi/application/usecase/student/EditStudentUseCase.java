@@ -53,8 +53,8 @@ public class EditStudentUseCase {
                 .toList();
 
         // Map new values to domain, reusing existing student ID
-        Student updatedStudent = studentMapper.requestToDomain(request,courses,existingStudent.assignments(),existingStudent.projects())
-                .withId(existingStudent.id());
+        Student updatedStudent = studentMapper.requestToDomain(request)
+                .withId(existingStudent.id()).withCourses(courses);
 
         // Persist and return
         return studentRepository.save(updatedStudent);

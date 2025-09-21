@@ -6,6 +6,7 @@ import com.jcaro.jcstudentapi.domain.model.Student;
 import com.jcaro.jcstudentapi.domain.model.StudentAssignment;
 import com.jcaro.jcstudentapi.domain.model.StudentProject;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,12 +29,12 @@ public class StudentMapper {
      * @param dto the StudentRequest DTO containing input data
      * @return a new Student domain object with basic information
      */
-    public Student requestToDomain(StudentRequest dto, List<Course> courses, List<StudentAssignment> studentAssignments, List<StudentProject> studentProjects) {
+    public Student requestToDomain(StudentRequest dto) {
         return new Student(
                 null,
                 dto.name(),
                 dto.email(),
-                courses, studentAssignments, studentProjects
+                Collections.emptyList()
         );
     }
 }

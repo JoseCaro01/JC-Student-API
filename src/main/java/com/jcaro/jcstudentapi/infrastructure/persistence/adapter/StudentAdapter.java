@@ -56,14 +56,14 @@ public class StudentAdapter implements StudentRepository {
 
     @Override
     public List<Student> findByAssignmentId(Long assignmentId) {
-        return studentRepositoryJPA.findByStudentAssignmentListId(assignmentId).stream()
+        return studentRepositoryJPA.findByAssignmentId(assignmentId).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Student> findByProjectId(Long projectId) {
-        return studentRepositoryJPA.findByStudentAssignmentListId(projectId).stream()
+        return studentRepositoryJPA.findByProjectId(projectId).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }

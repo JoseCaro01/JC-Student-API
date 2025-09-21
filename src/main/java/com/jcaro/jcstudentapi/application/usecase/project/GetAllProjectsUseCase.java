@@ -22,9 +22,9 @@ public class GetAllProjectsUseCase {
      * @param courseId optional course id
      * @return list of projects
      */
-    public List<Project> execute(Optional<Long> courseId) {
-        return courseId.isPresent()
-                ? projectRepository.findByCourseId(courseId.get())
+    public List<Project> execute(Long courseId) {
+        return courseId!=null
+                ? projectRepository.findByCourseId(courseId)
                 : projectRepository.findAll();
     }
 }

@@ -23,9 +23,9 @@ public class GetStudentsUseCase {
      * @param courseId optional filter by course
      * @return list of students
      */
-    public List<Student> execute(Optional<Long> courseId) {
-        if (courseId.isPresent()) {
-            return studentRepository.findByCourseId(courseId.get());
+    public List<Student> execute(Long courseId) {
+        if (courseId!=null) {
+            return studentRepository.findByCourseId(courseId);
         }
         return studentRepository.findAll();
     }

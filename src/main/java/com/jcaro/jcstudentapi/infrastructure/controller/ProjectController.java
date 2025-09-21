@@ -45,7 +45,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Project>> getAllProjects(@RequestParam(value = "courseId") Optional<Long> courseId) {
+    public ResponseEntity<List<Project>> getAllProjects(@RequestParam(name = "courseId", required = false) Long courseId) {
         return new ResponseEntity<>(getAllProjectsUseCase.execute(courseId),HttpStatus.OK);
 
     }

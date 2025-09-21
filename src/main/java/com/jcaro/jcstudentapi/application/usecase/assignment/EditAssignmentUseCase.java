@@ -41,6 +41,6 @@ public class EditAssignmentUseCase {
             throw new CourseNotFoundException(-1L);
         }
         final Course course = courseRepository.findById(assignment.courseId()).orElseThrow(() -> new CourseNotFoundException(assignment.courseId()));
-        return assignmentRepository.save(assignmentMapper.requestToDomain(assignment, course).withId(id));
+        return assignmentRepository.save(assignmentMapper.requestToDomain(assignment,course).withId(id));
     }
 }

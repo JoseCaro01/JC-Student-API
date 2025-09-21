@@ -46,8 +46,7 @@ public class ProjectEntityMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                courseEntityMapper.toDomain(entity.getCourse()),
-                Collections.emptyList() // Avoid for cyclic dependecy
+                courseEntityMapper.toDomain(entity.getCourse())
         );
     }
 
@@ -67,7 +66,6 @@ public class ProjectEntityMapper {
         entity.setName(domain.name());
         entity.setDescription(domain.description());
         entity.setCourse(courseEntityMapper.toEntity(domain.course()));
-        entity.setStudentProjects(Collections.emptyList());
 
         return entity;
     }

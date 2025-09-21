@@ -55,6 +55,13 @@ public class StudentAssignmentAdapter implements StudentAssignmentRepository {
     }
 
     @Override
+    public List<StudentAssignment> findByStudentIdAndCourseId(Long studentId, Long courseId) {
+        return studentAssignmentJpaRepository.findByStudentIdAndAssignmentCourseId(studentId,courseId).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteById(Long id) {
         studentAssignmentJpaRepository.deleteById(id);
     }

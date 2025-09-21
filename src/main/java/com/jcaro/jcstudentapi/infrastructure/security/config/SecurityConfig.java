@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -68,7 +69,12 @@ public class SecurityConfig {
         // set the session creation policy to stateless
         http.sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(STATELESS));
         // set up authorization for different request matchers and user roles
-        http.authorizeHttpRequests((requests) -> requests.requestMatchers("/users/**").authenticated()
+        http.authorizeHttpRequests((requests) -> requests
+                .requestMatchers("/assignments/**").authenticated()
+                .requestMatchers("/courses/**").authenticated()
+                .requestMatchers("/projects/**").authenticated()
+                .requestMatchers("/students/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/users").authenticated()
                 .anyRequest().permitAll());
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);

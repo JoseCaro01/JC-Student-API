@@ -31,11 +31,13 @@ public class CreateAssignmentUseCase {
      * @throws CourseNotFoundException if course is null or doesn't exist
      */
     public Assignment execute(AssignmentRequest assignment) {
+
+
         if (assignment.courseId() == null) {
             throw new CourseNotFoundException(-1L);
         }
         final Course course = courseRepository.findById(assignment.courseId()).orElseThrow(() -> new CourseNotFoundException(assignment.courseId()));
-        Assignment newAssignment = assignmentMapper.requestToDomain(assignment, course);
+        final Assignment newAssignment = assignmentMapper.requestToDomain(assignment,course);
         return assignmentRepository.save(newAssignment);
     }
 }

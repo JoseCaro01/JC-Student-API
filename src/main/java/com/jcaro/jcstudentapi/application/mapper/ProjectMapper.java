@@ -29,8 +29,7 @@ public class ProjectMapper {
                 null,                  // id is generated later by persistence
                 dto.name(),
                 dto.description(),
-                course,
-                Collections.emptyList() // studentProjects initialized as empty
+                course
         );
     }
 }

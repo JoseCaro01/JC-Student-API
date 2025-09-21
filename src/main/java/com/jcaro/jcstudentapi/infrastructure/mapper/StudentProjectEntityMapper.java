@@ -15,6 +15,21 @@ import java.util.stream.Collectors;
 @Component
 public class StudentProjectEntityMapper {
 
+    private final StudentEntityMapper studentEntityMapper;
+    private final ProjectEntityMapper projectEntityMapper;
+
+    /**
+     * Constructor that injects CourseEntityMapper to map
+     * Course objects within Assignment.
+     *
+     * @param studentEntityMapper mapper to convert CourseEntity to Course
+     * @param projectEntityMapper mapper to convert CourseEntity to Course
+     */
+    public StudentProjectEntityMapper(StudentEntityMapper studentEntityMapper, ProjectEntityMapper projectEntityMapper) {
+        this.studentEntityMapper = studentEntityMapper;
+        this.projectEntityMapper = projectEntityMapper;
+    }
+
     /**
      * Converts a StudentProjectEntity to a StudentProject domain model.
      *
@@ -29,8 +44,8 @@ public class StudentProjectEntityMapper {
 
         return new StudentProject(
                 entity.getId(),
-                null, // Avoid for cyclic dependency
-                null, // Project -> Avoid for cyclic dependency
+                studentEntityMapper.toDomain(entity.getStudent()),
+                projectEntityMapper.toDomain(entity.getProject()),
                 entity.getCodeQuality(),
                 entity.getFunctionality(),
                 entity.getSecurity(),
@@ -53,6 +68,8 @@ public class StudentProjectEntityMapper {
 
         StudentProjectEntity entity = new StudentProjectEntity();
         entity.setId(domain.id());
+        entity.setStudent(studentEntityMapper.toEntity(domain.student()));
+        entity.setProject(projectEntityMapper.toEntity(domain.project()));
         entity.setCodeQuality(domain.codeQuality());
         entity.setFunctionality(domain.functionality());
         entity.setSecurity(domain.security());

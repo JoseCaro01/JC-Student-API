@@ -1,8 +1,5 @@
 package com.jcaro.jcstudentapi.domain.model;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Represents a course in the academic system.
@@ -11,10 +8,7 @@ import java.util.ArrayList;
 public record Course(
         Long id,
         String name,
-        String programmingLanguage,
-        List<Student> students,
-        List<Assignment> assignments,
-        List<Project> projects
+        String programmingLanguage
 ) {
 
     /**
@@ -27,9 +21,6 @@ public record Course(
         if (programmingLanguage == null || programmingLanguage.isBlank())
             throw new IllegalArgumentException("Programming language cannot be empty");
 
-        if (students == null) students = Collections.emptyList();
-        if (assignments == null) assignments = Collections.emptyList();
-        if (projects == null) projects = Collections.emptyList();
     }
 
     /**
@@ -39,7 +30,7 @@ public record Course(
      * @return a new Course instance
      */
     public Course withId(Long id) {
-        return new Course(id, name, programmingLanguage, students, assignments, projects);
+        return new Course(id, name, programmingLanguage);
     }
 
     /**
@@ -49,7 +40,7 @@ public record Course(
      * @return a new Course instance
      */
     public Course withName(String name) {
-        return new Course(id, name, programmingLanguage, students, assignments, projects);
+        return new Course(id, name, programmingLanguage);
     }
 
     /**
@@ -59,36 +50,7 @@ public record Course(
      * @return a new Course instance
      */
     public Course withProgrammingLanguage(String programmingLanguage) {
-        return new Course(id, name, programmingLanguage, students, assignments, projects);
+        return new Course(id, name, programmingLanguage);
     }
 
-    /**
-     * Returns a copy of this Course with a new list of students.
-     *
-     * @param students the new students list
-     * @return a new Course instance
-     */
-    public Course withStudents(List<Student> students) {
-        return new Course(id, name, programmingLanguage, students, assignments, projects);
-    }
-
-    /**
-     * Returns a copy of this Course with a new list of assignments.
-     *
-     * @param assignments the new assignments list
-     * @return a new Course instance
-     */
-    public Course withAssignments(List<Assignment> assignments) {
-        return new Course(id, name, programmingLanguage, students, assignments, projects);
-    }
-
-    /**
-     * Returns a copy of this Course with a new list of projects.
-     *
-     * @param projects the new projects list
-     * @return a new Course instance
-     */
-    public Course withProjects(List<Project> projects) {
-        return new Course(id, name, programmingLanguage, students, assignments, projects);
-    }
 }

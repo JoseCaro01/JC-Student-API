@@ -1,12 +1,13 @@
 package com.jcaro.jcstudentapi.domain.repository;
 
 import com.jcaro.jcstudentapi.domain.model.StudentProject;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Repository interface for StudentProject.
- *
+ * <p>
  * Defines the operations required by the domain to manage student projects,
  * without specifying how the data is persisted.
  * This is a pure Domain Layer interface (port).
@@ -44,6 +45,15 @@ public interface StudentProjectRepository {
      * @return an Optional containing the StudentProject if found, empty otherwise
      */
     Optional<StudentProject> findByStudentIdAndProjectId(Long studentId, Long projectId);
+
+    /**
+     * Finds a StudentProject by student ID and Course ID.
+     *
+     * @param studentId the ID of the student
+     * @param courseId  the ID of the course
+     * @return a List containing the StudentProject
+     */
+    List<StudentProject> findByStudentIdAndCourseId(Long studentId, Long courseId);
 
     /**
      * Deletes a StudentProject by its ID.

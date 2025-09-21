@@ -13,8 +13,7 @@ public record Assignment(
         String name,
         String description,
         boolean obligatory,
-        Course course,
-        List<StudentAssignment> studentAssignments
+        Course course
 ) {
 
     /**
@@ -28,8 +27,7 @@ public record Assignment(
             throw new IllegalArgumentException("Assignment name cannot be empty");
         if (course == null)
             throw new IllegalArgumentException("Course cannot be null");
-        if (studentAssignments == null)
-            studentAssignments = Collections.emptyList();
+
     }
 
 
@@ -40,7 +38,7 @@ public record Assignment(
      * @return a new Assignment instance
      */
     public Assignment withId(Long id) {
-        return new Assignment(id, name, description, obligatory, course, studentAssignments);
+        return new Assignment(id, name, description, obligatory, course);
     }
 
     /**
@@ -50,7 +48,7 @@ public record Assignment(
      * @return a new Assignment instance
      */
     public Assignment withName(String name) {
-        return new Assignment(id, name, description, obligatory, course, studentAssignments);
+        return new Assignment(id, name, description, obligatory, course);
     }
 
     /**
@@ -60,7 +58,7 @@ public record Assignment(
      * @return a new Assignment instance
      */
     public Assignment withDescription(String description) {
-        return new Assignment(id, name, description, obligatory, course, studentAssignments);
+        return new Assignment(id, name, description, obligatory, course);
     }
 
     /**
@@ -70,7 +68,7 @@ public record Assignment(
      * @return a new Assignment instance
      */
     public Assignment withObligatory(boolean obligatory) {
-        return new Assignment(id, name, description, obligatory, course, studentAssignments);
+        return new Assignment(id, name, description, obligatory, course);
     }
 
     /**
@@ -80,16 +78,7 @@ public record Assignment(
      * @return a new Assignment instance
      */
     public Assignment withCourse(Course course) {
-        return new Assignment(id, name, description, obligatory, course, studentAssignments);
+        return new Assignment(id, name, description, obligatory, course);
     }
 
-    /**
-     * Returns a copy of this Assignment with a new list of StudentAssignments.
-     *
-     * @param studentAssignments the new list
-     * @return a new Assignment instance
-     */
-    public Assignment withStudentAssignments(List<StudentAssignment> studentAssignments) {
-        return new Assignment(id, name, description, obligatory, course, studentAssignments);
-    }
 }

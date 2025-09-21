@@ -14,8 +14,6 @@ import java.util.Collections;
 public class StudentEntityMapper {
 
     private final CourseEntityMapper courseEntityMapper;
-    private final StudentAssignmentEntityMapper studentAssignmentEntityMapper;
-    private final StudentProjectEntityMapper studentProjectEntityMapper;
 
     /**
      * Constructor that injects CourseEntityMapper to map
@@ -23,10 +21,8 @@ public class StudentEntityMapper {
      *
      * @param courseEntityMapper mapper to convert CourseEntity to Course
      */
-    public StudentEntityMapper(CourseEntityMapper courseEntityMapper, StudentAssignmentEntityMapper studentAssignmentEntityMapper, StudentProjectEntityMapper studentProjectEntityMapper) {
+    public StudentEntityMapper(CourseEntityMapper courseEntityMapper) {
         this.courseEntityMapper = courseEntityMapper;
-        this.studentAssignmentEntityMapper = studentAssignmentEntityMapper;
-        this.studentProjectEntityMapper = studentProjectEntityMapper;
     }
 
     /**
@@ -43,9 +39,7 @@ public class StudentEntityMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getEmail(),
-                entity.getCourses().stream().map(courseEntityMapper::toDomain).toList(),
-                entity.getStudentAssignmentList().stream().map(studentAssignmentEntityMapper::toDomain).toList(),
-                entity.getStudentProjectList().stream().map(studentProjectEntityMapper::toDomain).toList()
+                entity.getCourses().stream().map(courseEntityMapper::toDomain).toList()
         );
 
     }
@@ -67,9 +61,7 @@ public class StudentEntityMapper {
         e.setName(domain.name());
         e.setEmail(domain.email());
         e.setCourses(domain.courses().stream().map(courseEntityMapper::toEntity).toList());
-        e.setStudentAssignmentList(domain.assignments().stream().map(studentAssignmentEntityMapper::toEntity).toList());
-        e.setStudentProjectList(domain.projects().stream().map(studentProjectEntityMapper::toEntity).toList());
-        return e;
+         return e;
     }
 
 }

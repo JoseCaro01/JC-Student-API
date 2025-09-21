@@ -19,17 +19,11 @@ public class CourseEntity {
     private Long id;
     private String name;
     private String programmingLanguage;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<AssignmentEntity> assignmentList;
-
     @ManyToMany(mappedBy = "courses",cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<StudentEntity> studentList;
-
     @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<ProjectEntity> projectList;
+    private List<AssignmentEntity> assignmentList;
+    @OneToOne(mappedBy = "course",cascade = CascadeType.ALL)
+    private ProjectEntity project;
 
 }

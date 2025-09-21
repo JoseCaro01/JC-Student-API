@@ -26,14 +26,12 @@ public class AssignmentMapper {
      * @return a new Assignment domain object
      */
     public Assignment requestToDomain(AssignmentRequest request, Course course) {
-        List<StudentAssignment> studentAssignments = Collections.emptyList(); // No assignments initially
         return new Assignment(
                 null, // id is null for new Assignment, assigned by persistence layer
                 request.name(),
                 request.description(),
                 request.obligatory(),
-                course,
-                studentAssignments
+                course
         );
     }
 

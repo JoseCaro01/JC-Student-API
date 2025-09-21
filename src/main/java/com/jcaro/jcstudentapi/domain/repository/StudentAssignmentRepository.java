@@ -45,6 +45,16 @@ public interface StudentAssignmentRepository {
      */
     Optional<StudentAssignment> findByStudentIdAndAssignmentId(Long studentId, Long assignmentId);
 
+
+    /**
+     * Finds a List<StudentAssignment> by student ID and Course ID.
+     *
+     * @param studentId the ID of the student
+     * @param courseId the ID of the Course
+     * @return a List containing the StudentAssignment
+     */
+    List<StudentAssignment> findByStudentIdAndCourseId(Long studentId, Long courseId);
+
     /**
      * Deletes a StudentAssignment by its ID.
      *

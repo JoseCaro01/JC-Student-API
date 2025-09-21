@@ -17,14 +17,15 @@ A RESTful API built with Spring Boot for managing students, courses, assignments
 ---
 
 ## 🛠️ Tech Stack
-- **Spring Boot 2.7**: Backend framework for building the API.
-- **Spring Data JPA (Hibernate)**: Data persistence layer with MySQL.
-- **Spring Security**: Authentication and authorization for user management.
-- **Spring Validation**: Ensures robust request validation.
-- **iText PDF**: Generates PDF reports for evaluations.
-- **Spring Mail**: Sends reports directly to email.
-- **Lombok**: Reduces boilerplate code.
-- **Swagger / Springdoc OpenAPI**: Provides live documentation and testing of the API.
+
+- **Spring Boot 3.5**
+- **Spring Data JPA (Hibernate)** with MySQL
+- **Spring Security** with JWT
+- **Spring Validation**
+- **iText 7** for PDF generation
+- **Spring Mail** for sending emails
+- **Lombok** to reduce boilerplate
+- **Swagger / Springdoc OpenAPI** for live API documentation
 
 ---
 

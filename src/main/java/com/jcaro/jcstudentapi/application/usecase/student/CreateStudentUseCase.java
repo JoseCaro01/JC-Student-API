@@ -43,7 +43,7 @@ public class CreateStudentUseCase {
                         .orElseThrow(() -> new CourseNotFoundException(courseId)))
                 .collect(Collectors.toList());
 
-        Student student = studentMapper.requestToDomain(request,courses, Collections.emptyList(),Collections.emptyList());
+        Student student = studentMapper.requestToDomain(request).withCourses(courses);
 
         return studentRepository.save(student);
     }

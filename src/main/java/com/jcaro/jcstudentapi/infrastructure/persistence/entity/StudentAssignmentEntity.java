@@ -19,11 +19,9 @@ public class StudentAssignmentEntity {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     private StudentEntity student;
 
     @ManyToOne
-    @JsonIgnore
     private AssignmentEntity assignment;
 
     @Enumerated(EnumType.STRING)

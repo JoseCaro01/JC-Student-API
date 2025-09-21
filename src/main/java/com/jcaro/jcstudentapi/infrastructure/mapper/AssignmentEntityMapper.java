@@ -3,7 +3,6 @@ package com.jcaro.jcstudentapi.infrastructure.mapper;
 import com.jcaro.jcstudentapi.domain.model.Assignment;
 import com.jcaro.jcstudentapi.infrastructure.persistence.entity.AssignmentEntity;
 import org.springframework.stereotype.Component;
-import java.util.Collections;
 
 /**
  * Maps between AssignmentEntity (JPA) and Assignment (domain).
@@ -41,8 +40,8 @@ public class AssignmentEntityMapper {
                 entity.getName(),
                 entity.getDescription(),
                 entity.isObligatory(),
-                courseEntityMapper.toDomain(entity.getCourse()),
-                Collections.emptyList() // Avoid for cyclic dependency
+                courseEntityMapper.toDomain(entity.getCourse())
+
         );
     }
 

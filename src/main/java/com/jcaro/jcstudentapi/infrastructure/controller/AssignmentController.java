@@ -73,7 +73,7 @@ public class AssignmentController {
      * @return a list of {@link Assignment}
      */
     @GetMapping
-    public ResponseEntity<List<Assignment>> getAllAssignments(@RequestParam("courseId") Optional<Long> courseId) {
+    public ResponseEntity<List<Assignment>> getAllAssignments(@RequestParam(name = "courseId", required = false) Long courseId) {
         List<Assignment> assignments = getAllAssignmentsUseCase.execute(courseId);
         return new ResponseEntity<>(assignments, HttpStatus.OK);
     }

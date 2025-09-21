@@ -18,11 +18,9 @@ public class StudentEntity {
     private Long id;
     private String name;
     private String email;
-
     @ManyToMany
     @JoinTable(name = "student_course")
     private List<CourseEntity> courses;
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentAssignmentEntity> studentAssignmentList;
 
