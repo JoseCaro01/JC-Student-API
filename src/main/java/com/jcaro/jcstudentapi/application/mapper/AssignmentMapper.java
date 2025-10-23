@@ -1,6 +1,8 @@
 package com.jcaro.jcstudentapi.application.mapper;
 
 import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentRequest;
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
+import com.jcaro.jcstudentapi.application.dto.course.CourseDetailedResponse;
 import com.jcaro.jcstudentapi.domain.model.Assignment;
 import com.jcaro.jcstudentapi.domain.model.Course;
 import com.jcaro.jcstudentapi.domain.model.StudentAssignment;
@@ -9,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Mapper for converting between AssignmentRequest DTO and Assignment domain model.
+ * Mapper for converting between Request and Response DTOs and Assignment domain model.
  * <p>
  * The mapper handles the translation of simple fields and lists, but it assumes
  * that related entities (like Course) are already loaded and passed in as parameters.
@@ -32,6 +34,23 @@ public class AssignmentMapper {
                 request.description(),
                 request.obligatory(),
                 course
+        );
+    }
+
+    /**
+     * Converts an Assignment domain object into a AssignmentResponse DTO.
+     * <p>
+     *
+     * @param assignment the Course domain object
+     * @return a AssignmentResponse DTO for returning to API clients
+     */
+    public AssignmentResponse domainToAssignmentResponse(Assignment assignment) {
+        return new AssignmentResponse(
+                assignment.id(),
+                assignment.name(),
+                assignment.description(),
+                assignment.obligatory(),
+                assignment.course().id()
         );
     }
 

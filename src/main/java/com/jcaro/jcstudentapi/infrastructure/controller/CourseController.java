@@ -1,10 +1,8 @@
 package com.jcaro.jcstudentapi.infrastructure.controller;
 
+import com.jcaro.jcstudentapi.application.dto.course.CourseDetailedResponse;
 import com.jcaro.jcstudentapi.application.dto.course.CourseRequest;
-import com.jcaro.jcstudentapi.application.usecase.course.CreateCourseUseCase;
-import com.jcaro.jcstudentapi.application.usecase.course.EditCourseUseCase;
-import com.jcaro.jcstudentapi.application.usecase.course.GetAllCoursesUseCase;
-import com.jcaro.jcstudentapi.application.usecase.course.RemoveCourseUseCase;
+import com.jcaro.jcstudentapi.application.usecase.course.*;
 import com.jcaro.jcstudentapi.domain.model.Course;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,21 +20,28 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/courses")
+@CrossOrigin
 public class CourseController {
 
     private final CreateCourseUseCase createCourseUseCase;
     private final EditCourseUseCase editCourseUseCase;
     private final GetAllCoursesUseCase getAllCoursesUseCase;
+    private final GetCourseByIdUseCase getCourseByIdUseCase;
+    private final GetDetailedCourseUseCase getDetailedCourseUseCase;
     private final RemoveCourseUseCase removeCourseUseCase;
 
     public CourseController(
             CreateCourseUseCase createCourseUseCase,
             EditCourseUseCase editCourseUseCase,
             GetAllCoursesUseCase getAllCoursesUseCase,
+            GetCourseByIdUseCase getCourseByIdUseCase,
+            GetDetailedCourseUseCase getDetailedCourseUseCase,
             RemoveCourseUseCase removeCourseUseCase) {
         this.createCourseUseCase = createCourseUseCase;
         this.editCourseUseCase = editCourseUseCase;
         this.getAllCoursesUseCase = getAllCoursesUseCase;
+        this.getCourseByIdUseCase= getCourseByIdUseCase;
+        this.getDetailedCourseUseCase = getDetailedCourseUseCase;
         this.removeCourseUseCase = removeCourseUseCase;
     }
 
@@ -66,7 +71,7 @@ public class CourseController {
     }
 
     /**
-     * Retrieves all courses.
+     * Retrieves a course by id.
      *
      * @return a list of {@link Course}
      */
@@ -74,6 +79,28 @@ public class CourseController {
     public ResponseEntity<List<Course>> getAllCourses() {
         List<Course> courses = getAllCoursesUseCase.execute();
         return new ResponseEntity<>(courses, HttpStatus.OK);
+    }
+
+    /**
+     * Retrieve course.
+     *
+     * @param id the ID of the course to obtain
+     * @return a {@link Course}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Course> getCourse( @PathVariable Long id) {
+        return new ResponseEntity<>(getCourseByIdUseCase.execute(id), HttpStatus.OK);
+    }
+
+    /**
+     * Retrieve detailed course.
+     *
+     * @param id the ID of the course to obtain
+     * @return a {@link CourseDetailedResponse}
+     */
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<CourseDetailedResponse> getDetailedCourse(@PathVariable Long id) {
+        return new ResponseEntity<>(getDetailedCourseUseCase.execute(id), HttpStatus.OK);
     }
 
     /**

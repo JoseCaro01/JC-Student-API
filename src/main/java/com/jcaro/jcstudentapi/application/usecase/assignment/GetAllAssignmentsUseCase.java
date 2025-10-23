@@ -1,5 +1,7 @@
 package com.jcaro.jcstudentapi.application.usecase.assignment;
 
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
+import com.jcaro.jcstudentapi.application.mapper.AssignmentMapper;
 import com.jcaro.jcstudentapi.domain.model.Assignment;
 import com.jcaro.jcstudentapi.domain.repository.AssignmentRepository;
 
@@ -12,9 +14,12 @@ import java.util.Optional;
 public class GetAllAssignmentsUseCase {
 
     private final AssignmentRepository assignmentRepository;
+    private final AssignmentMapper assignmentMapper;
 
-    public GetAllAssignmentsUseCase(AssignmentRepository assignmentRepository) {
+
+    public GetAllAssignmentsUseCase(AssignmentRepository assignmentRepository, AssignmentMapper assignmentMapper) {
         this.assignmentRepository = assignmentRepository;
+        this.assignmentMapper = assignmentMapper;
     }
 
     /**
@@ -23,10 +28,12 @@ public class GetAllAssignmentsUseCase {
      * @param courseId optional filter by courseId
      * @return list of assignments
      */
-    public List<Assignment> execute(Long courseId) {
+    public List<AssignmentResponse> execute(Long courseId) {
 
-        return courseId !=null
-                ? assignmentRepository.findByCourseId(courseId)
+        final List<Assignment> assignments=    courseId !=null
+                ?  assignmentRepository.findByCourseId(courseId)
                 : assignmentRepository.findAll();
+
+        return assignments.stream().map(assignmentMapper::domainToAssignmentResponse).toList();
     }
 }

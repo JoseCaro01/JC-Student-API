@@ -36,6 +36,7 @@ public interface CourseRepository {
      */
     List<Course> findAll();
 
+
     /**
      * Deletes a course by its ID.
      *

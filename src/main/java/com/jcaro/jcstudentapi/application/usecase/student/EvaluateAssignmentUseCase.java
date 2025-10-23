@@ -1,7 +1,9 @@
 package com.jcaro.jcstudentapi.application.usecase.student;
 
+import com.jcaro.jcstudentapi.application.dto.studentAssignment.StudentAssignmentRequest;
 import com.jcaro.jcstudentapi.application.exception.assignment.AssignmentNotFoundException;
 import com.jcaro.jcstudentapi.application.exception.student.StudentNotFoundException;
+import com.jcaro.jcstudentapi.application.mapper.StudentAssignmentMapper;
 import com.jcaro.jcstudentapi.domain.model.Assignment;
 import com.jcaro.jcstudentapi.domain.model.ScoreEnum;
 import com.jcaro.jcstudentapi.domain.model.Student;
@@ -14,6 +16,8 @@ import com.jcaro.jcstudentapi.infrastructure.mapper.StudentAssignmentEntityMappe
 import com.jcaro.jcstudentapi.infrastructure.mapper.StudentEntityMapper;
 import com.jcaro.jcstudentapi.infrastructure.persistence.entity.StudentAssignmentEntity;
 
+import java.util.List;
+
 /**
  * Use case for evaluating an assignment for a student.
  */
@@ -22,47 +26,47 @@ public class EvaluateAssignmentUseCase {
     private final StudentRepository studentRepository;
     private final AssignmentRepository assignmentRepository;
     private final StudentAssignmentRepository studentAssignmentRepository;
+    private final StudentAssignmentMapper studentAssignmentMapper;
 
 
     public EvaluateAssignmentUseCase(StudentRepository studentRepository,
                                      AssignmentRepository assignmentRepository,
-                                     StudentAssignmentRepository studentAssignmentRepository) {
+                                     StudentAssignmentRepository studentAssignmentRepository,StudentAssignmentMapper studentAssignmentMapper) {
         this.studentRepository = studentRepository;
         this.assignmentRepository = assignmentRepository;
         this.studentAssignmentRepository = studentAssignmentRepository;
+        this.studentAssignmentMapper= studentAssignmentMapper;
     }
 
     /**
      * Executes the evaluation of a student for an assignment.
      *
      * @param studentId   the student id
-     * @param assignmentId the assignment id
-     * @param score   the score to assign
+     * @param studentAssignmentRequests the studentAssignment list for evaluate the assignments
      *
      * @throws StudentNotFoundException if student don't exist
      * @throws AssignmentNotFoundException if assignment don't exist
      */
-    public void execute(Long studentId, Long assignmentId, String score) {
-        // 1. Convertir el String a un ScoreEnum
-        ScoreEnum scoreEnum;
-        try {
-            int scoreValue = Integer.parseInt(score);
-            scoreEnum = ScoreEnum.fromValue(scoreValue);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid score value provided: " + score, e);
-        }
+    public void execute(Long studentId, List<StudentAssignmentRequest> studentAssignmentRequests) {
+
        final  Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException(studentId));
 
-     final   Assignment assignment = assignmentRepository.findById(assignmentId)
-                .orElseThrow(() -> new AssignmentNotFoundException(assignmentId));
-
-      final  StudentAssignment studentAssignment = studentAssignmentRepository
-                .findByStudentIdAndAssignmentId(studentId, assignmentId)
-                .orElse(new StudentAssignment(null,student, assignment, scoreEnum)).withScore(scoreEnum);
+       final List<StudentAssignment> studentAssignments =  studentAssignmentRequests.stream().map(studentAssignmentRequest -> {
 
 
+           final   Assignment assignment = assignmentRepository.findById(studentAssignmentRequest.assignmentId())
+                   .orElseThrow(() -> new AssignmentNotFoundException(studentAssignmentRequest.assignmentId()));
 
-        studentAssignmentRepository.save(studentAssignment);
+           return  studentAssignmentRepository
+                   .findByStudentIdAndAssignmentId(studentId, studentAssignmentRequest.assignmentId())
+                   .orElse(studentAssignmentMapper.requestToDomain(student,assignment,studentAssignmentRequest)).withScore(ScoreEnum.fromValue(studentAssignmentRequest.score()));
+
+
+       }).toList();
+
+
+
+        studentAssignmentRepository.saveAll(studentAssignments);
     }
 }

@@ -1,13 +1,16 @@
 package com.jcaro.jcstudentapi.application.mapper;
 
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
 import com.jcaro.jcstudentapi.application.dto.project.ProjectRequest;
+import com.jcaro.jcstudentapi.application.dto.project.ProjectResponse;
+import com.jcaro.jcstudentapi.domain.model.Assignment;
 import com.jcaro.jcstudentapi.domain.model.Course;
 import com.jcaro.jcstudentapi.domain.model.Project;
 
 import java.util.Collections;
 
 /**
- * Mapper for converting between ProjectRequest DTO and the Project domain model.
+ * Mapper for converting between Request and Response DTOs and the Project domain model.
  * <p>
  * This class belongs to the application layer and ensures separation of concerns
  * by transforming input data into the domain model without exposing infrastructure details.
@@ -30,6 +33,23 @@ public class ProjectMapper {
                 dto.name(),
                 dto.description(),
                 course
+        );
+    }
+
+
+    /**
+     * Converts a Project domain object into a ProjectResponse DTO.
+     * <p>
+     *
+     * @param project the Project domain object
+     * @return a ProjectResponse DTO for returning to API clients
+     */
+    public ProjectResponse domainToProjectResponse(Project project) {
+        return new ProjectResponse(
+                project.id(),
+                project.name(),
+                project.description(),
+                project.course().id()
         );
     }
 }

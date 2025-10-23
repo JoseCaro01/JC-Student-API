@@ -33,7 +33,7 @@ public class JcStudentApiApplication  {
 	@Bean
 	CommandLineRunner run(UserRepository userRepository, RoleRepository roleRepository) {
 		return args -> {
-		/*	final Role userRole = roleRepository.save(new Role(null, "ROLE_USER"));
+			/*final Role userRole = roleRepository.save(new Role(null, "ROLE_USER"));
 			final Role adminRole = roleRepository.save(new Role(null, "ROLE_ADMIN"));
 			final User jose = userRepository.save(new User(null, "Jose Alfonso", "Caro Romero", "jcaroromeroprog@gmail.com", passwordEncoder().encode("12345678"),
 					LocalDateTime.now(), List.of(adminRole)));*/

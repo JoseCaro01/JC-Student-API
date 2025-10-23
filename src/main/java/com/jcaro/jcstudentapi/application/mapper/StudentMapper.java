@@ -1,6 +1,12 @@
 package com.jcaro.jcstudentapi.application.mapper;
 
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
+import com.jcaro.jcstudentapi.application.dto.course.CourseDetailedResponse;
+import com.jcaro.jcstudentapi.application.dto.project.ProjectResponse;
+import com.jcaro.jcstudentapi.application.dto.student.StudentDetailedResponse;
 import com.jcaro.jcstudentapi.application.dto.student.StudentRequest;
+import com.jcaro.jcstudentapi.application.dto.studentAssignment.StudentAssignmentResponse;
+import com.jcaro.jcstudentapi.application.dto.studentProject.StudentProjectResponse;
 import com.jcaro.jcstudentapi.domain.model.Course;
 import com.jcaro.jcstudentapi.domain.model.Student;
 import com.jcaro.jcstudentapi.domain.model.StudentAssignment;
@@ -35,6 +41,28 @@ public class StudentMapper {
                 dto.name(),
                 dto.email(),
                 Collections.emptyList()
+        );
+    }
+
+    /**
+     * Converts a Course domain object into a CourseDetailedResponse DTO.
+     * <p>
+     *
+     * @param student                    the Student domain object
+     * @param courseDetailedResponses    the detailed Course DTO object
+     * @param studentAssignmentResponses the studentAssignment list DTO object
+     * @param studentProjectResponses    the studentProject list DTO object
+     * @return a StudentDetailedResponse DTO for returning to API clients
+     */
+    public StudentDetailedResponse domainToStudentDetailedResponse(Student student, CourseDetailedResponse courseDetailedResponses, List<StudentAssignmentResponse> studentAssignmentResponses, List<StudentProjectResponse> studentProjectResponses) {
+        return new StudentDetailedResponse(
+                student.id(),
+                student.name(),
+                student.email(),
+                student.courses(),
+                courseDetailedResponses,
+                studentAssignmentResponses,
+                studentProjectResponses
         );
     }
 }

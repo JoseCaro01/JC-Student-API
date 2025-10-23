@@ -1,4 +1,4 @@
-package com.jcaro.jcstudentapi.application.dto.student;
+package com.jcaro.jcstudentapi.application.dto.studentProject;
 
 
 import com.jcaro.jcstudentapi.domain.model.ScoreEnum;
@@ -10,23 +10,23 @@ import jakarta.validation.constraints.NotNull;
  * Groups all the scoring parameters into a single object
  * instead of passing them as multiple request parameters.
  */
-public record StudentEvaluateProjectRequest(
+public record StudentProjectRequest(
 
         @NotNull(message = "Code quality score is required")
-        ScoreEnum codeQuality,
+        String codeQuality,
 
         @NotNull(message = "Functionality score is required")
-        ScoreEnum functionality,
+        String functionality,
 
         @NotNull(message = "Security score is required")
-        ScoreEnum security,
+        String security,
 
         @NotNull(message = "Documentation score is required")
-        ScoreEnum documentation,
+        String documentation,
 
         @NotNull(message = "Deployment score is required")
-        ScoreEnum deployment,
+        String deployment,
 
         @NotNull(message = "Extra score is required")
-        ScoreEnum extra
+        String extra
 ) {}

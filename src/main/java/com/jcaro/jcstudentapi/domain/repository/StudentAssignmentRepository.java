@@ -22,6 +22,14 @@ public interface StudentAssignmentRepository {
     StudentAssignment save(StudentAssignment studentAssignment);
 
     /**
+     * Saves a StudentAssignment list
+     *
+     * @param studentAssignments the StudentAssignment List to save
+     * @return the saved StudentAssignment list
+     */
+    List<StudentAssignment> saveAll(List<StudentAssignment> studentAssignments);
+
+    /**
      * Finds a StudentAssignment by its ID.
      *
      * @param id the ID of the StudentAssignment

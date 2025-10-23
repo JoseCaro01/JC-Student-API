@@ -1,6 +1,7 @@
 package com.jcaro.jcstudentapi.application.usecase.assignment;
 
 import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentRequest;
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
 import com.jcaro.jcstudentapi.application.exception.assignment.AssignmentNotFoundException;
 import com.jcaro.jcstudentapi.application.exception.course.CourseNotFoundException;
 import com.jcaro.jcstudentapi.application.mapper.AssignmentMapper;
@@ -33,14 +34,17 @@ public class EditAssignmentUseCase {
      * @throws AssignmentNotFoundException if assignment is invalid
      * @throws CourseNotFoundException     if course is invalid
      */
-    public Assignment execute(Long id, AssignmentRequest assignment) {
+    public AssignmentResponse execute(Long id, AssignmentRequest assignment) {
         if (assignmentRepository.findById(id).isEmpty()) {
             throw new AssignmentNotFoundException(id);
         }
         if (assignment.courseId() == null) {
             throw new CourseNotFoundException(-1L);
         }
+
         final Course course = courseRepository.findById(assignment.courseId()).orElseThrow(() -> new CourseNotFoundException(assignment.courseId()));
-        return assignmentRepository.save(assignmentMapper.requestToDomain(assignment,course).withId(id));
+
+        return assignmentMapper.domainToAssignmentResponse(assignmentRepository.save(assignmentMapper.requestToDomain(assignment, course).withId(id)));
+
     }
 }

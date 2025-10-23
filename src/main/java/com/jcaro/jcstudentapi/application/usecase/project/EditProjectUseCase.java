@@ -1,6 +1,7 @@
 package com.jcaro.jcstudentapi.application.usecase.project;
 
 import com.jcaro.jcstudentapi.application.dto.project.ProjectRequest;
+import com.jcaro.jcstudentapi.application.dto.project.ProjectResponse;
 import com.jcaro.jcstudentapi.application.exception.assignment.AssignmentNotFoundException;
 import com.jcaro.jcstudentapi.application.exception.course.CourseNotFoundException;
 import com.jcaro.jcstudentapi.application.exception.project.ProjectNotFoundException;
@@ -30,10 +31,10 @@ public class EditProjectUseCase {
      *
      * @param project the project to update
      * @return the updated project
-     * @throws CourseNotFoundException if the course does not exist
+     * @throws CourseNotFoundException  if the course does not exist
      * @throws ProjectNotFoundException if the project does not exist
      */
-    public Project execute(Long id, ProjectRequest project) {
+    public ProjectResponse execute(Long id, ProjectRequest project) {
 
         if (projectRepository.findById(id).isEmpty()) {
             throw new ProjectNotFoundException(id);
@@ -44,6 +45,6 @@ public class EditProjectUseCase {
 
         final Course course = courseRepository.findById(project.courseId()).orElseThrow(() -> new CourseNotFoundException(project.courseId()));
 
-        return projectRepository.save(projectMapper.requestToDomain(project, course).withId(id));
+        return projectMapper.domainToProjectResponse(projectRepository.save(projectMapper.requestToDomain(project, course).withId(id)));
     }
 }

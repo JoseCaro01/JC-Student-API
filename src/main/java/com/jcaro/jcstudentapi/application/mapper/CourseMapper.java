@@ -1,12 +1,17 @@
 package com.jcaro.jcstudentapi.application.mapper;
 
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
+import com.jcaro.jcstudentapi.application.dto.course.CourseDetailedResponse;
 import com.jcaro.jcstudentapi.application.dto.course.CourseRequest;
-import com.jcaro.jcstudentapi.domain.model.Course;
+import com.jcaro.jcstudentapi.application.dto.project.ProjectResponse;
+import com.jcaro.jcstudentapi.application.dto.user.UserResponse;
+import com.jcaro.jcstudentapi.domain.model.*;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
- * Mapper for converting between CourseRequest DTOs and the Course domain model.
+ * Mapper for converting between Request and Response DTOs and the Course domain model.
  * <p>
  * This class resides in the application layer and ensures separation of concerns by
  * translating data to and from the domain without introducing any Spring dependencies.
@@ -29,6 +34,29 @@ public class CourseMapper {
                 null,
                 dto.name(),
                 dto.programmingLanguage()
+        );
+    }
+
+
+    /**
+     * Converts a Course domain object into a CourseDetailedResponse DTO.
+     * <p>
+     *
+     * @param course the Course domain object
+     * @param students the Student list domain object
+     * @param assignments the Assignment list domain object
+     * @param projects the Project list domain object
+     * @return a CourseDetailedResponse DTO for returning to API clients
+     */
+    public CourseDetailedResponse domainToCourseDetailedResponse(Course course, List<Student> students, List<AssignmentResponse> assignments, List<ProjectResponse> projects) {
+        return new CourseDetailedResponse(
+                course.id(),
+                course.name(),
+                course.programmingLanguage(),
+                students,
+                assignments,
+                projects
+
         );
     }
 }
