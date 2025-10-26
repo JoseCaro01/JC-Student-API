@@ -3,10 +3,7 @@ package com.jcaro.jcstudentapi.infrastructure.config;
 
 import com.jcaro.jcstudentapi.application.mapper.ProjectMapper;
 import com.jcaro.jcstudentapi.application.mapper.UserMapper;
-import com.jcaro.jcstudentapi.application.usecase.project.CreateProjectUseCase;
-import com.jcaro.jcstudentapi.application.usecase.project.EditProjectUseCase;
-import com.jcaro.jcstudentapi.application.usecase.project.GetAllProjectsUseCase;
-import com.jcaro.jcstudentapi.application.usecase.project.RemoveProjectUseCase;
+import com.jcaro.jcstudentapi.application.usecase.project.*;
 import com.jcaro.jcstudentapi.domain.repository.CourseRepository;
 import com.jcaro.jcstudentapi.domain.repository.ProjectRepository;
 import com.jcaro.jcstudentapi.domain.repository.ProjectRepository;
@@ -22,18 +19,23 @@ public class ProjectConfig {
     }
 
     @Bean
-    public CreateProjectUseCase createProjectUseCase(ProjectRepository projectRepository,CourseRepository courseRepository,ProjectMapper projectMapper) {
-        return new CreateProjectUseCase(projectRepository,courseRepository, projectMapper);
+    public CreateProjectUseCase createProjectUseCase(ProjectRepository projectRepository, CourseRepository courseRepository, ProjectMapper projectMapper) {
+        return new CreateProjectUseCase(projectRepository, courseRepository, projectMapper);
     }
 
     @Bean
-    public EditProjectUseCase editProjectUseCase(ProjectRepository projectRepository, CourseRepository courseRepository,ProjectMapper projectMapper) {
-        return new EditProjectUseCase(projectRepository,courseRepository,projectMapper);
+    public EditProjectUseCase editProjectUseCase(ProjectRepository projectRepository, CourseRepository courseRepository, ProjectMapper projectMapper) {
+        return new EditProjectUseCase(projectRepository, courseRepository, projectMapper);
     }
 
     @Bean
-    public GetAllProjectsUseCase getAllProjectsUseCase(ProjectRepository projectRepository) {
-        return new GetAllProjectsUseCase(projectRepository);
+    public GetAllProjectsUseCase getAllProjectsUseCase(ProjectRepository projectRepository, ProjectMapper projectMapper) {
+        return new GetAllProjectsUseCase(projectRepository, projectMapper);
+    }
+
+    @Bean
+    public GetProjectByIdUseCase getProjectByIdUseCase(ProjectRepository projectRepository, ProjectMapper projectMapper) {
+        return new GetProjectByIdUseCase(projectRepository, projectMapper);
     }
 
     @Bean

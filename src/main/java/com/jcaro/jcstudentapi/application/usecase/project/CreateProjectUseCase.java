@@ -1,6 +1,7 @@
 package com.jcaro.jcstudentapi.application.usecase.project;
 
 import com.jcaro.jcstudentapi.application.dto.project.ProjectRequest;
+import com.jcaro.jcstudentapi.application.dto.project.ProjectResponse;
 import com.jcaro.jcstudentapi.application.exception.course.CourseNotFoundException;
 import com.jcaro.jcstudentapi.application.exception.project.ProjectNotFoundException;
 import com.jcaro.jcstudentapi.application.mapper.ProjectMapper;
@@ -31,12 +32,12 @@ public class CreateProjectUseCase {
      * @return the created project
      * @throws CourseNotFoundException if the course does not exist
      */
-    public Project execute(ProjectRequest project) {
+    public ProjectResponse execute(ProjectRequest project) {
         if (project.courseId() == null) {
             throw new CourseNotFoundException(-1L);
         }
 
         final Course course = courseRepository.findById(project.courseId()).orElseThrow(() -> new CourseNotFoundException(project.courseId()));
-        return projectRepository.save(projectMapper.requestToDomain(project, course));
+        return projectMapper.domainToProjectResponse(projectRepository.save(projectMapper.requestToDomain(project, course)));
     }
 }

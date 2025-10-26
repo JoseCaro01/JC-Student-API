@@ -21,12 +21,6 @@ import java.util.List;
 public class JcStudentApiApplication  {
 
 	public static void main(String[] args) {
-
-
-	/*	Dotenv dotenv = Dotenv.load();
-		dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
-	*/
-
 		SpringApplication.run(JcStudentApiApplication.class, args);
 	}
 
@@ -42,6 +36,8 @@ public class JcStudentApiApplication  {
 			final Role userRole = roleRepository.save(new Role(null, "ROLE_USER"));
 			final Role adminRole = roleRepository.save(new Role(null, "ROLE_ADMIN"));
 			final User jose = userRepository.save(new User(null, "Jose Alfonso", "Caro Romero", "jcaroromeroprog@gmail.com", passwordEncoder().encode(System.getenv("ADMIN_PASSWORD")),
+					LocalDateTime.now(), List.of(adminRole)));
+			final User guest = userRepository.save(new User(null, "Guest", "User", "guestuser@gmail.com", passwordEncoder().encode("guestuser"),
 					LocalDateTime.now(), List.of(adminRole)));
 		};
 

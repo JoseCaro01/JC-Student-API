@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.jcaro</groupId>
     <artifactId>jcstudentapi</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>JC-Student-API</name>
     <description>JC-Student-API simple project</description>
     <url/>

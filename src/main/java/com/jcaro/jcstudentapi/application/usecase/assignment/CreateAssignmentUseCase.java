@@ -1,6 +1,7 @@
 package com.jcaro.jcstudentapi.application.usecase.assignment;
 
 import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentRequest;
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
 import com.jcaro.jcstudentapi.application.exception.course.CourseNotFoundException;
 import com.jcaro.jcstudentapi.application.mapper.AssignmentMapper;
 import com.jcaro.jcstudentapi.domain.model.Assignment;
@@ -30,14 +31,14 @@ public class CreateAssignmentUseCase {
      * @return the persisted Assignment
      * @throws CourseNotFoundException if course is null or doesn't exist
      */
-    public Assignment execute(AssignmentRequest assignment) {
+    public AssignmentResponse execute(AssignmentRequest assignment) {
 
 
         if (assignment.courseId() == null) {
             throw new CourseNotFoundException(-1L);
         }
         final Course course = courseRepository.findById(assignment.courseId()).orElseThrow(() -> new CourseNotFoundException(assignment.courseId()));
-        final Assignment newAssignment = assignmentMapper.requestToDomain(assignment,course);
-        return assignmentRepository.save(newAssignment);
+        final Assignment newAssignment = assignmentMapper.requestToDomain(assignment, course);
+        return assignmentMapper.domainToAssignmentResponse(assignmentRepository.save(newAssignment));
     }
 }

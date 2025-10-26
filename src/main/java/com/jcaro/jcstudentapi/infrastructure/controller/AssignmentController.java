@@ -1,10 +1,8 @@
 package com.jcaro.jcstudentapi.infrastructure.controller;
 
 import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentRequest;
-import com.jcaro.jcstudentapi.application.usecase.assignment.CreateAssignmentUseCase;
-import com.jcaro.jcstudentapi.application.usecase.assignment.EditAssignmentUseCase;
-import com.jcaro.jcstudentapi.application.usecase.assignment.GetAllAssignmentsUseCase;
-import com.jcaro.jcstudentapi.application.usecase.assignment.RemoveAssignmentUseCase;
+import com.jcaro.jcstudentapi.application.dto.assignment.AssignmentResponse;
+import com.jcaro.jcstudentapi.application.usecase.assignment.*;
 import com.jcaro.jcstudentapi.domain.model.Assignment;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,16 +26,19 @@ public class AssignmentController {
     private final CreateAssignmentUseCase createAssignmentUseCase;
     private final EditAssignmentUseCase editAssignmentUseCase;
     private final GetAllAssignmentsUseCase getAllAssignmentsUseCase;
+    private final GetAssignmentByIdUseCase getAssignmentByIdUseCase;
     private final RemoveAssignmentUseCase removeAssignmentUseCase;
 
     public AssignmentController(
             CreateAssignmentUseCase createAssignmentUseCase,
             EditAssignmentUseCase editAssignmentUseCase,
             GetAllAssignmentsUseCase getAllAssignmentsUseCase,
+            GetAssignmentByIdUseCase getAssignmentByIdUseCase,
             RemoveAssignmentUseCase removeAssignmentUseCase) {
         this.createAssignmentUseCase = createAssignmentUseCase;
         this.editAssignmentUseCase = editAssignmentUseCase;
         this.getAllAssignmentsUseCase = getAllAssignmentsUseCase;
+        this.getAssignmentByIdUseCase= getAssignmentByIdUseCase;
         this.removeAssignmentUseCase = removeAssignmentUseCase;
     }
 
@@ -48,8 +49,8 @@ public class AssignmentController {
      * @return the created {@link Assignment}
      */
     @PostMapping
-    public ResponseEntity<Assignment> createAssignment(@RequestBody @Valid AssignmentRequest assignment) {
-        Assignment createdAssignment = createAssignmentUseCase.execute(assignment);
+    public ResponseEntity<AssignmentResponse> createAssignment(@RequestBody @Valid AssignmentRequest assignment) {
+        AssignmentResponse createdAssignment = createAssignmentUseCase.execute(assignment);
         return new ResponseEntity<>(createdAssignment, HttpStatus.CREATED);
     }
 
@@ -61,8 +62,8 @@ public class AssignmentController {
      * @return the updated {@link Assignment}
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Assignment> updateAssignment(@PathVariable Long id, @RequestBody @Valid AssignmentRequest assignment) {
-        Assignment updatedAssignment = editAssignmentUseCase.execute(id, assignment);
+    public ResponseEntity<AssignmentResponse> updateAssignment(@PathVariable Long id, @RequestBody @Valid AssignmentRequest assignment) {
+        AssignmentResponse updatedAssignment = editAssignmentUseCase.execute(id, assignment);
         return new ResponseEntity<>(updatedAssignment, HttpStatus.OK);
     }
 
@@ -73,9 +74,21 @@ public class AssignmentController {
      * @return a list of {@link Assignment}
      */
     @GetMapping
-    public ResponseEntity<List<Assignment>> getAllAssignments(@RequestParam(name = "courseId", required = false) Long courseId) {
-        List<Assignment> assignments = getAllAssignmentsUseCase.execute(courseId);
+    public ResponseEntity<List<AssignmentResponse>> getAllAssignments(@RequestParam(name = "courseId", required = false) Long courseId) {
+        List<AssignmentResponse> assignments = getAllAssignmentsUseCase.execute(courseId);
         return new ResponseEntity<>(assignments, HttpStatus.OK);
+    }
+
+    /**
+     * Retrieves an assignment by his id.
+     *
+     * @param id to retrieve the assignment
+     * @return a list of {@link Assignment}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<AssignmentResponse> getAssignment(@PathVariable Long id) {
+
+        return new ResponseEntity<>(getAssignmentByIdUseCase.execute(id), HttpStatus.OK);
     }
 
     /**

@@ -36,6 +36,13 @@ public class StudentAssignmentAdapter implements StudentAssignmentRepository {
     }
 
     @Override
+    public List<StudentAssignment> saveAll(List<StudentAssignment> studentAssignments) {
+        final List<StudentAssignmentEntity> studentAssignmentEntities = studentAssignments.stream().map(mapper::toEntity).toList();
+        final List<StudentAssignmentEntity> savedEntities = studentAssignmentJpaRepository.saveAll(studentAssignmentEntities);
+        return savedEntities.stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
     public Optional<StudentAssignment> findById(Long id) {
         return studentAssignmentJpaRepository.findById(id)
                 .map(mapper::toDomain);
@@ -56,7 +63,7 @@ public class StudentAssignmentAdapter implements StudentAssignmentRepository {
 
     @Override
     public List<StudentAssignment> findByStudentIdAndCourseId(Long studentId, Long courseId) {
-        return studentAssignmentJpaRepository.findByStudentIdAndAssignmentCourseId(studentId,courseId).stream()
+        return studentAssignmentJpaRepository.findByStudentIdAndAssignmentCourseId(studentId, courseId).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }

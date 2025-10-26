@@ -2,10 +2,7 @@ package com.jcaro.jcstudentapi.infrastructure.config;
 
 import com.jcaro.jcstudentapi.application.mapper.AssignmentMapper;
 import com.jcaro.jcstudentapi.application.mapper.UserMapper;
-import com.jcaro.jcstudentapi.application.usecase.assignment.CreateAssignmentUseCase;
-import com.jcaro.jcstudentapi.application.usecase.assignment.EditAssignmentUseCase;
-import com.jcaro.jcstudentapi.application.usecase.assignment.GetAllAssignmentsUseCase;
-import com.jcaro.jcstudentapi.application.usecase.assignment.RemoveAssignmentUseCase;
+import com.jcaro.jcstudentapi.application.usecase.assignment.*;
 import com.jcaro.jcstudentapi.domain.repository.AssignmentRepository;
 import com.jcaro.jcstudentapi.domain.repository.CourseRepository;
 import org.springframework.context.annotation.Bean;
@@ -30,9 +27,15 @@ public class AssignmentConfig {
     }
 
     @Bean
-    public GetAllAssignmentsUseCase getAllAssignmentsUseCase(AssignmentRepository assignmentRepository) {
-        return new GetAllAssignmentsUseCase(assignmentRepository);
+    public GetAllAssignmentsUseCase getAllAssignmentsUseCase(AssignmentRepository assignmentRepository,AssignmentMapper assignmentMapper) {
+        return new GetAllAssignmentsUseCase(assignmentRepository,assignmentMapper);
     }
+
+    @Bean
+    public GetAssignmentByIdUseCase getAssignmentByIdUseCase(AssignmentRepository assignmentRepository, AssignmentMapper assignmentMapper) {
+        return new GetAssignmentByIdUseCase(assignmentRepository,assignmentMapper);
+    }
+
 
     @Bean
     public RemoveAssignmentUseCase removeAssignmentUseCase(AssignmentRepository assignmentRepository) {

@@ -23,7 +23,6 @@ public class StudentEntity {
     private List<CourseEntity> courses;
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentAssignmentEntity> studentAssignmentList;
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentProjectEntity> studentProjectList;
 }
