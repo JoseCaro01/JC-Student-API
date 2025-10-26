@@ -49,11 +49,11 @@ public class StudentController {
                              GetStudentsUseCase getStudentsUseCase,
                              RemoveStudentUseCase removeStudentUseCase,
                              EvaluateAssignmentUseCase evaluateAssignmentUseCase,
-                             EvaluateProjectUseCase evaluateProjectUseCase, GenerateStudentScorePDFUseCase generateStudentScorePDFUseCase, SendStudentScoreEmailUseCase sendStudentScoreEmailUseCase,GenerateStudentProjectScorePDFUseCase generateStudentProjectScorePDFUseCase,SendStudentProjectScoreEmailUseCase sendStudentProjectScoreEmailUseCase) {
+                             EvaluateProjectUseCase evaluateProjectUseCase, GenerateStudentScorePDFUseCase generateStudentScorePDFUseCase, SendStudentScoreEmailUseCase sendStudentScoreEmailUseCase, GenerateStudentProjectScorePDFUseCase generateStudentProjectScorePDFUseCase, SendStudentProjectScoreEmailUseCase sendStudentProjectScoreEmailUseCase) {
         this.createStudentUseCase = createStudentUseCase;
         this.editStudentUseCase = editStudentUseCase;
         this.getStudentByIdUseCase = getStudentByIdUseCase;
-        this.getDetailedStudentUseCase= getDetailedStudentUseCase;
+        this.getDetailedStudentUseCase = getDetailedStudentUseCase;
         this.getStudentsUseCase = getStudentsUseCase;
         this.removeStudentUseCase = removeStudentUseCase;
         this.evaluateAssignmentUseCase = evaluateAssignmentUseCase;
@@ -61,7 +61,7 @@ public class StudentController {
         this.generateStudentScorePDFUseCase = generateStudentScorePDFUseCase;
         this.sendStudentScoreEmailUseCase = sendStudentScoreEmailUseCase;
         this.generateStudentProjectScorePDFUseCase = generateStudentProjectScorePDFUseCase;
-        this.sendStudentProjectScoreEmailUseCase=sendStudentProjectScoreEmailUseCase;
+        this.sendStudentProjectScoreEmailUseCase = sendStudentProjectScoreEmailUseCase;
     }
 
     // --- CRUD Endpoints ---
@@ -96,8 +96,8 @@ public class StudentController {
      * @return the found {@link StudentDetailedResponse}, if exists
      */
     @GetMapping("/{id}/{courseId}/detail")
-    public ResponseEntity<StudentDetailedResponse> getDetailedStudent(@PathVariable Long id,@PathVariable Long courseId) {
-        return new ResponseEntity<>(getDetailedStudentUseCase.execute(id,courseId), HttpStatus.OK);
+    public ResponseEntity<StudentDetailedResponse> getDetailedStudent(@PathVariable Long id, @PathVariable Long courseId) {
+        return new ResponseEntity<>(getDetailedStudentUseCase.execute(id, courseId), HttpStatus.OK);
     }
 
     /**
@@ -139,23 +139,23 @@ public class StudentController {
     /**
      * Evaluates a student's assignment by assigning a score.
      *
-     * @param studentId    the ID of the student being evaluated
+     * @param studentId          the ID of the student being evaluated
      * @param studentAssignments the data required for evaluate an assignment
      * @return {@link HttpStatus#OK} if evaluation was successful
      */
     @PostMapping("/{studentId}/assignments/evaluate")
     public ResponseEntity<Void> evaluateAssignment(@PathVariable Long studentId,
-            @RequestBody @Valid List<StudentAssignmentRequest> studentAssignments
-            ) {
-        evaluateAssignmentUseCase.execute(studentId,studentAssignments);
+                                                   @RequestBody @Valid List<StudentAssignmentRequest> studentAssignments
+    ) {
+        evaluateAssignmentUseCase.execute(studentId, studentAssignments);
         return ResponseEntity.ok().build();
     }
 
     /**
      * Evaluates a student's project using multiple scoring categories.
      *
-     * @param studentId                     the ID of the student being evaluated
-     * @param projectId                     the ID of the project
+     * @param studentId             the ID of the student being evaluated
+     * @param projectId             the ID of the project
      * @param studentProjectRequest the request payload containing project evaluation details
      * @return {@link HttpStatus#OK} if evaluation was successful
      */
@@ -176,10 +176,10 @@ public class StudentController {
      * @param courseId  optional course filter
      * @return PDF file as ResponseEntity
      */
-    @GetMapping("/{studentId}/score-pdf")
+    @GetMapping("/{studentId}/{courseId}/score-pdf")
     public ResponseEntity<InputStreamResource> generateStudentScorePdf(
             @PathVariable Long studentId,
-            @RequestParam(name = "courseId", required = false) Long courseId) {
+            @PathVariable Long courseId) {
 
         final ByteArrayInputStream pdf = generateStudentScorePDFUseCase.execute(studentId, courseId);
 
@@ -196,13 +196,13 @@ public class StudentController {
      * Generate a PDF with the student's Project scores.
      *
      * @param studentId ID of the student
-     * @param courseId  optional course filter
+     * @param courseId  ID of the course
      * @return PDF file as ResponseEntity
      */
-    @GetMapping("/{studentId}/project-score-pdf")
+    @GetMapping("/{studentId}/{courseId}/project-score-pdf")
     public ResponseEntity<InputStreamResource> generateStudentProjectScorePdf(
             @PathVariable Long studentId,
-            @RequestParam(name = "courseId", required = false) Long courseId) {
+            @PathVariable Long courseId) {
 
         final ByteArrayInputStream pdf = generateStudentProjectScorePDFUseCase.execute(studentId, courseId);
 
@@ -221,10 +221,10 @@ public class StudentController {
      * @param studentId ID of the student
      * @param courseId  optional course filter
      */
-    @PostMapping("/{studentId}/send-score-pdf")
+    @PostMapping("/{studentId}/{courseId}/send-score-pdf")
     public ResponseEntity<Void> sendStudentScorePdfByEmail(
             @PathVariable Long studentId,
-            @RequestParam(name = "courseId", required = false) Long courseId) {
+            @PathVariable Long courseId) {
 
         sendStudentScoreEmailUseCase.execute(studentId, courseId);
 
@@ -237,10 +237,10 @@ public class StudentController {
      * @param studentId ID of the student
      * @param courseId  optional course filter
      */
-    @PostMapping("/{studentId}/project-send-score-pdf")
+    @PostMapping("/{studentId}/{courseId}/project-send-score-pdf")
     public ResponseEntity<Void> sendStudentProjectScorePdfByEmail(
             @PathVariable Long studentId,
-            @RequestParam(name = "courseId", required = false) Long courseId) {
+            @PathVariable Long courseId) {
 
         sendStudentProjectScoreEmailUseCase.execute(studentId, courseId);
 

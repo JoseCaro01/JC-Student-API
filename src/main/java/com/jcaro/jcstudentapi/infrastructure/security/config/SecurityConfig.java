@@ -1,5 +1,6 @@
 package com.jcaro.jcstudentapi.infrastructure.security.config;
 
+import com.jcaro.jcstudentapi.infrastructure.security.filters.CustomAccessDeniedHandler;
 import com.jcaro.jcstudentapi.infrastructure.security.filters.CustomAuthenticationFilter;
 import com.jcaro.jcstudentapi.infrastructure.security.filters.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,9 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CustomAuthenticationFilter instance created
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
+       final  CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
+        // CustomDeniedHandler
+       final  CustomAccessDeniedHandler customAccessDeniedHandler= new CustomAccessDeniedHandler();
         // set the URL that the filter should process
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
@@ -78,6 +81,8 @@ public class SecurityConfig {
                 .anyRequest().permitAll());
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
+        // add the custom denied handler
+        http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(customAccessDeniedHandler));
         // Add the custom authorization filter before the standard authentication filter.
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
