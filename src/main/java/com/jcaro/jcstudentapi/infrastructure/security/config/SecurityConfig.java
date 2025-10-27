@@ -60,9 +60,9 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CustomAuthenticationFilter instance created
-       final  CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
+        final CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
         // CustomDeniedHandler
-       final  CustomAccessDeniedHandler customAccessDeniedHandler= new CustomAccessDeniedHandler();
+        final CustomAccessDeniedHandler customAccessDeniedHandler = new CustomAccessDeniedHandler();
         // set the URL that the filter should process
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
@@ -93,9 +93,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200")); // 👈 tu frontend
+        configuration.setAllowedOrigins(List.of("https://jc-student.web.app", "https://jc-student.firebaseapp.com"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*")); // o más específico si quieres
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
